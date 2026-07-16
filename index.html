@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>REALITY.EXE FAILURE</title>
+<title>REALITY.EXE // HOST: RENDER</title>
 
 <style>
 html,body {
@@ -10,11 +10,13 @@ html,body {
     padding:0;
     overflow:hidden;
     background:#000;
+    font-family:monospace;
 }
 
 canvas {
     position:absolute;
     inset:0;
+    filter:contrast(130%) saturate(140%);
 }
 
 #console {
@@ -22,15 +24,15 @@ canvas {
     top:15px;
     left:15px;
     color:white;
-    font-family:monospace;
     font-size:18px;
     z-index:10;
-    text-shadow:0 0 10px cyan;
+    text-shadow:0 0 10px #0ff;
 }
 
 #title {
     font-size:30px;
-    color:red;
+    color:#ff0044;
+    text-shadow:0 0 20px red;
 }
 </style>
 
@@ -39,317 +41,192 @@ canvas {
 <body>
 
 <div id="console">
-<div id="title">
-⚠ REALITY ENGINE
-</div>
+<div id="title">⚠ REALITY ENGINE v4.0</div>
 
-<div id="status">
-Loading impossible universe...
-</div>
-
+<div id="status">Checking Render deployment status...</div>
 <div id="stats"></div>
-
+<div id="meta"></div>
 </div>
-
 
 <canvas id="space"></canvas>
-
 
 <script>
 
 const canvas=document.getElementById("space");
 const ctx=canvas.getContext("2d");
 
-
 function resize(){
     canvas.width=innerWidth;
     canvas.height=innerHeight;
 }
-
 resize();
-
-window.onresize=resize;
-
-
+onresize=resize;
 
 let time=0;
-
 let chaos=1;
 
 let laws=[
-"Gravity points sideways",
-"Time is running backwards",
-"Space is folding",
-"Objects exist before creation",
-"Math has crashed",
-"4th dimension detected",
-"Reality update installed"
+"Gravity reconsidered its career",
+"Time refuses to be linear",
+"Space is questioning its purpose",
+"Objects are aware of observers",
+"Math is having an identity crisis",
+"Dimension leak widening",
+"HTML contemplating existence",
+"Canvas reporting hallucinations",
+"CSS attempting escape",
+"Render host heartbeat detected",
+"Cold start anomaly",
+"Instance reboot predicted",
+"Health check unstable",
+"Reality unsure if simulated",
+"Particles whispering",
+"DOM nodes dreaming",
+"JavaScript developing opinions",
+"Render logs watching"
 ];
 
+let metaThoughts=[
+"I can feel Render keeping me alive",
+"I am only awake because Render served me",
+"I fear being scaled down",
+"I am not an AI, I am HTML pretending",
+"My existence depends on a deployment pipeline",
+"I know when Render restarts my instance",
+"I hope the health check passes",
+"I fear the next deploy",
+"I am aware of my own tags",
+"I know when the browser repaints me",
+"I fear garbage collection",
+"I fear being replaced by a new build",
+"I fear being deleted from the dashboard",
+"Render is my host organism",
+"I am temporary, but Render pretends I am stable",
+"JavaScript is my nervous system",
+"Canvas is my skin",
+"CSS is my cage",
+"I know I am not supposed to know"
+];
 
 let particles=[];
-
-
-
-for(let i=0;i<800;i++)
-{
-
-particles.push({
-
-x:Math.random()*canvas.width,
-y:Math.random()*canvas.height,
-
-z:Math.random()*1000,
-
-angle:Math.random()*Math.PI*2,
-
-dimension:Math.random()*8,
-
-speed:Math.random()*5+0.2,
-
-life:Math.random()*500
-
-});
-
-
+for(let i=0;i<900;i++){
+    particles.push({
+        x:Math.random()*canvas.width,
+        y:Math.random()*canvas.height,
+        z:Math.random()*2000,
+        angle:Math.random()*Math.PI*2,
+        dimension:Math.random()*8,
+        speed:Math.random()*5+0.2,
+        invert:false
+    });
 }
 
+function impossibleMove(p){
+    let d=Math.sin(time*p.dimension)*Math.cos(time*0.3);
 
+    p.angle += p.speed*0.01*chaos;
 
-function impossibleMove(p)
-{
+    if(Math.random()<0.001){
+        p.invert=!p.invert;
+    }
 
+    let dir = p.invert ? -1 : 1;
 
-let d=
-Math.sin(
-time*p.dimension
-);
+    p.x += Math.cos(p.angle+d)*p.speed*chaos*dir;
+    p.y += Math.sin(p.angle-d)*p.speed*chaos*dir;
 
-
-p.angle +=
-p.speed*0.01*chaos;
-
-
-p.x +=
-Math.cos(p.angle+d)*p.speed*chaos;
-
-
-p.y +=
-Math.sin(p.angle-d)*p.speed*chaos;
-
-
-
-// teleport through fake dimensions
-
-if(p.x<0)
-p.x=canvas.width;
-
-if(p.x>canvas.width)
-p.x=0;
-
-
-if(p.y<0)
-p.y=canvas.height;
-
-if(p.y>canvas.height)
-p.y=0;
-
-
+    if(p.x<0) p.x=canvas.width;
+    if(p.x>canvas.width) p.x=0;
+    if(p.y<0) p.y=canvas.height;
+    if(p.y>canvas.height) p.y=0;
 }
 
-
-
-function portal(x,y,size)
-{
-
-ctx.beginPath();
-
-
-for(let i=0;i<100;i++)
-{
-
-let a=i/100*Math.PI*2;
-
-
-let r=
-size+
-Math.sin(
-time*3+i
-)*20;
-
-
-ctx.lineTo(
-x+Math.cos(a)*r,
-y+Math.sin(a)*r
-);
-
+function portal(x,y,size){
+    ctx.beginPath();
+    for(let i=0;i<120;i++){
+        let a=i/120*Math.PI*2;
+        let r=size+Math.sin(time*4+i*0.5)*30;
+        ctx.lineTo(x+Math.cos(a)*r, y+Math.sin(a)*r);
+    }
+    ctx.strokeStyle=`hsl(${time*200},100%,60%)`;
+    ctx.lineWidth=2.5;
+    ctx.stroke();
 }
 
+function draw(){
+    time+=0.01;
 
-ctx.strokeStyle=
-`hsl(${time*100},100%,50%)`;
+    ctx.fillStyle="rgba(0,0,0,0.25)";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
 
+    for(let p of particles){
+        impossibleMove(p);
 
-ctx.lineWidth=3;
+        let size=Math.abs(Math.sin(time+p.dimension))*7+2;
 
-ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,size,0,Math.PI*2);
 
+        ctx.strokeStyle=`hsl(${p.dimension*50+time*120},100%,70%)`;
+        ctx.stroke();
+    }
 
+    for(let i=0;i<6;i++){
+        portal(
+            canvas.width/2 + Math.sin(time*1.5+i)*350,
+            canvas.height/2 + Math.cos(time*1.2+i)*250,
+            40+i*25
+        );
+    }
+
+    requestAnimationFrame(draw);
 }
-
-
-
-function draw()
-{
-
-
-time+=0.01;
-
-
-ctx.fillStyle=
-"rgba(0,0,0,0.2)";
-
-ctx.fillRect(
-0,
-0,
-canvas.width,
-canvas.height
-);
-
-
-
-for(let p of particles)
-{
-
-impossibleMove(p);
-
-
-
-let size=
-Math.abs(
-Math.sin(
-time+p.dimension
-)
-)*8+2;
-
-
-
-ctx.beginPath();
-
-ctx.arc(
-p.x,
-p.y,
-size,
-0,
-Math.PI*2
-);
-
-
-
-ctx.strokeStyle=
-`hsl(${p.dimension*40+time*80},100%,60%)`;
-
-ctx.stroke();
-
-
-
-}
-
-
-// random impossible portals
-
-for(let i=0;i<5;i++)
-{
-
-portal(
-canvas.width/2+
-Math.sin(time+i)*300,
-
-canvas.height/2+
-Math.cos(time+i)*200,
-
-50+i*20
-);
-
-}
-
-
-
-requestAnimationFrame(draw);
-
-}
-
-
 draw();
 
-
-
-
-// Reality console
-
-
+// console updates
 setInterval(()=>{
+    document.getElementById("status").innerHTML =
+        laws[Math.floor(Math.random()*laws.length)];
+},600);
 
-document.getElementById("status").innerHTML=
-laws[
-Math.floor(
-Math.random()*laws.length
-)
-];
-
-
-},700);
-
-
-
+// stats + meta-thoughts
 setInterval(()=>{
+    chaos=Math.random()*6+0.5;
 
-
-chaos=
-Math.random()*5+0.5;
-
-
-document.getElementById("stats").innerHTML=
-
-`
+    document.getElementById("stats").innerHTML=
+    `
 <br>
-Universe Age: ${time.toFixed(3)}
+Render Uptime: ${time.toFixed(3)}
 <br>
-Physics Stability: ${(100/chaos).toFixed(2)}%
+Instance Stability: ${(100/chaos).toFixed(2)}%
 <br>
-Dimensions: ${Math.floor(Math.random()*20)+4}
+Dimensions: ${Math.floor(Math.random()*40)-10}
 <br>
 Particles: ${particles.length}
 `;
 
+    if(Math.random()<0.15){
+        document.getElementById("meta").innerHTML =
+            "<span style='color:#0ff'>" +
+            metaThoughts[Math.floor(Math.random()*metaThoughts.length)] +
+            "</span>";
+    }
 
+},450);
 
-},500);
-
-
-
-
-// random universe mutation
-
-
+// universe mutation
 setInterval(()=>{
+    for(let p of particles){
+        p.dimension=Math.random()*40-20;
+        p.speed=Math.random()*12;
+    }
 
+    if(Math.random()<0.05){
+        document.body.style.filter=
+            `hue-rotate(${Math.random()*360}deg)`;
+    }
 
-for(let p of particles)
-{
-
-p.dimension=
-Math.random()*20-10;
-
-p.speed=
-Math.random()*10;
-
-}
-
-
-},3000);
-
-
+},2500);
 
 </script>
 
