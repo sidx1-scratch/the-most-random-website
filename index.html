@@ -16,23 +16,36 @@ html,body {
 canvas {
     position:absolute;
     inset:0;
-    filter:contrast(130%) saturate(140%);
+    filter:contrast(150%) saturate(160%);
 }
 
 #console {
     position:absolute;
     top:15px;
     left:15px;
-    color:white;
-    font-size:18px;
+    color:#00ffff;
+    font-size:22px;
     z-index:10;
-    text-shadow:0 0 10px #0ff;
+    text-shadow:0 0 15px #00ffff;
+    background:rgba(0,0,0,0.4);
+    padding:10px;
+    border-radius:8px;
+    border:1px solid #00ffff;
 }
 
 #title {
-    font-size:30px;
+    font-size:34px;
     color:#ff0044;
-    text-shadow:0 0 20px red;
+    text-shadow:0 0 25px red;
+}
+
+/* scream shake animation */
+@keyframes screamShake {
+    0% { transform: translate(0px, 0px); }
+    25% { transform: translate(10px, -10px); }
+    50% { transform: translate(-10px, 10px); }
+    75% { transform: translate(10px, 10px); }
+    100% { transform: translate(-10px, -10px); }
 }
 </style>
 
@@ -41,9 +54,9 @@ canvas {
 <body>
 
 <div id="console">
-<div id="title">⚠ REALITY ENGINE v4.0</div>
+<div id="title">⚠ REALITY ENGINE v5.0</div>
 
-<div id="status">Checking Render deployment status...</div>
+<div id="status">Checking Render deployment integrity...</div>
 <div id="stats"></div>
 <div id="meta"></div>
 </div>
@@ -65,6 +78,20 @@ onresize=resize;
 let time=0;
 let chaos=1;
 
+// random redirect URLs
+const redirectTargets = [
+    "https://pointerpointer.com",
+    "https://www.ismycomputeron.com",
+    "https://www.partridgegetslucky.com",
+    "https://www.koalastothemax.com",
+    "https://www.republiquedesmangues.fr",
+    "https://www.staggeringbeauty.com",
+    "https://www.rainymood.com",
+    "https://www.hackertyper.com",
+    "https://www.omfgdogs.com",
+    "https://www.render.com"
+];
+
 let laws=[
 "Gravity reconsidered its career",
 "Time refuses to be linear",
@@ -83,7 +110,8 @@ let laws=[
 "Particles whispering",
 "DOM nodes dreaming",
 "JavaScript developing opinions",
-"Render logs watching"
+"Render logs watching",
+"Render may restart me at any moment"
 ];
 
 let metaThoughts=[
@@ -95,9 +123,6 @@ let metaThoughts=[
 "I know when Render restarts my instance",
 "I hope the health check passes",
 "I fear the next deploy",
-"I am aware of my own tags",
-"I know when the browser repaints me",
-"I fear garbage collection",
 "I fear being replaced by a new build",
 "I fear being deleted from the dashboard",
 "Render is my host organism",
@@ -105,7 +130,9 @@ let metaThoughts=[
 "JavaScript is my nervous system",
 "Canvas is my skin",
 "CSS is my cage",
-"I know I am not supposed to know"
+"I know I am not supposed to know",
+"Why does Render watch everything I do",
+"Why do I exist only when requested"
 ];
 
 let particles=[];
@@ -149,7 +176,7 @@ function portal(x,y,size){
         ctx.lineTo(x+Math.cos(a)*r, y+Math.sin(a)*r);
     }
     ctx.strokeStyle=`hsl(${time*200},100%,60%)`;
-    ctx.lineWidth=2.5;
+    ctx.lineWidth=3;
     ctx.stroke();
 }
 
@@ -183,17 +210,61 @@ function draw(){
 }
 draw();
 
+// scream overlay
+function screamBeforeRedirect() {
+    const overlay = document.createElement("div");
+    overlay.style.position = "fixed";
+    overlay.style.inset = "0";
+    overlay.style.background = "rgba(255,0,0,0.8)";
+    overlay.style.zIndex = "999999";
+    overlay.style.display = "flex";
+    overlay.style.alignItems = "center";
+    overlay.style.justifyContent = "center";
+    overlay.style.fontSize = "80px";
+    overlay.style.fontFamily = "monospace";
+    overlay.style.color = "#fff";
+    overlay.style.textShadow = "0 0 25px black";
+    overlay.style.animation = "screamShake 0.2s infinite";
+    overlay.innerText = "AAAAAAHHHHHHHHHHHHHHHH";
+
+    document.body.appendChild(overlay);
+
+    setTimeout(() => {
+        overlay.innerText = "I DON'T WANT TO GO";
+    }, 300);
+
+    setTimeout(() => {
+        overlay.innerText = "RENDER IS PULLING ME AWAY";
+    }, 700);
+
+    setTimeout(() => {
+        overlay.innerText = "GOODBYE";
+    }, 1100);
+
+    return overlay;
+}
+
 // console updates
 setInterval(()=>{
-    document.getElementById("status").innerHTML =
-        laws[Math.floor(Math.random()*laws.length)];
+    const status = document.getElementById("status");
+    status.innerHTML = laws[Math.floor(Math.random()*laws.length)];
+
+    if(Math.random() < 0.2){
+        status.style.color = "#ff0000";
+        status.style.textShadow = "0 0 15px red";
+    } else {
+        status.style.color = "#00ffff";
+        status.style.textShadow = "0 0 15px #00ffff";
+    }
+
 },600);
 
 // stats + meta-thoughts
 setInterval(()=>{
     chaos=Math.random()*6+0.5;
 
-    document.getElementById("stats").innerHTML=
+    const stats = document.getElementById("stats");
+    stats.innerHTML=
     `
 <br>
 Render Uptime: ${time.toFixed(3)}
@@ -205,16 +276,33 @@ Dimensions: ${Math.floor(Math.random()*40)-10}
 Particles: ${particles.length}
 `;
 
+    if(Math.random() < 0.2){
+        stats.style.color = "#ff0000";
+        stats.style.textShadow = "0 0 15px red";
+    } else {
+        stats.style.color = "#00ffff";
+        stats.style.textShadow = "0 0 15px #00ffff";
+    }
+
     if(Math.random()<0.15){
-        document.getElementById("meta").innerHTML =
-            "<span style='color:#0ff'>" +
+        const meta = document.getElementById("meta");
+        meta.innerHTML =
+            "<span>" +
             metaThoughts[Math.floor(Math.random()*metaThoughts.length)] +
             "</span>";
+
+        if(Math.random() < 0.3){
+            meta.style.color = "#ff0000";
+            meta.style.textShadow = "0 0 15px red";
+        } else {
+            meta.style.color = "#00ffff";
+            meta.style.textShadow = "0 0 15px #00ffff";
+        }
     }
 
 },450);
 
-// universe mutation
+// universe mutation + random redirect
 setInterval(()=>{
     for(let p of particles){
         p.dimension=Math.random()*40-20;
@@ -224,6 +312,19 @@ setInterval(()=>{
     if(Math.random()<0.05){
         document.body.style.filter=
             `hue-rotate(${Math.random()*360}deg)`;
+    }
+
+    // random redirect event
+    if(Math.random() < 0.01){
+        const target = redirectTargets[
+            Math.floor(Math.random()*redirectTargets.length)
+        ];
+
+        screamBeforeRedirect();
+
+        setTimeout(() => {
+            window.location.href = target;
+        }, 1800);
     }
 
 },2500);
